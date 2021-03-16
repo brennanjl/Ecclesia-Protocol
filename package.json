@@ -1,0 +1,21 @@
+{
+  "type": "module",
+  "name": "ecclesia-js",
+  "version": "1.0.0",
+  "description": "JS library for interacting with the Ecclesia Protocol",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "brennanlamey",
+  "license": "ISC",
+  "dependencies": {
+    "ar-gql": "^0.0.6",
+    "arweave": "^1.10.11"
+  },
+  "devDependencies": {
+    "@rollup/pluginutils": "^4.1.0",
+    "prettier": "2.2.1",
+    "rollup-pluginutils": "^2.8.2"
+  }
+}
