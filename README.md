@@ -1,6 +1,8 @@
 # ecclesia-protocol
 JS Library for interacting with Ecclesia.
 
+NOTE: For development purposes, I have a devKey.js that exports my private key in JSON so that I don't have to reenter on every file.
+
 Functions:
 
 createPost(string)
@@ -11,3 +13,6 @@ getPost(publicKey, number of posts)
  
 createAccount(name, biography, address)
  - Creates a new account tied to that address.  In the future, addresses will be hidden from the user with a unique naming handle (will be done with smart contract, not necessary for mvp).
+
+getAccount(address)
+ - Gets all account info for that address.
