@@ -2,7 +2,6 @@ import Arweave from 'arweave';
 import {gateway} from "./gateway.js";
 import {devKey} from './devKey.js'; //This imports the devs personal key from a file in .gitignore, and will be replaced once the library is ready for use
 const arweave = Arweave.init(gateway);
-import fs from 'fs';
 const key = devKey;
 
 export const postData = async(text) => {
@@ -25,14 +24,9 @@ export const postData = async(text) => {
 
     _transaction.addTag('App-Name', 'Ecclesia');
     _transaction.addTag('version', '0.0.1');
-    //_transaction.addTag('Time', Date.now());
-    //_transaction.addTag('Content-Type', 'text/plain');
-    //Currently not being used
     _transaction.addTag('Type', 'post');
 
     await arweave.transactions.sign(_transaction, key);
-    
-    let resumeTxId = 'mytxid'
     
     let uploader = await arweave.transactions.getUploader(_transaction);
 
