@@ -4,7 +4,7 @@ import {devKey} from './devKey.js'; //This imports the devs personal key from a 
 const arweave = Arweave.init(gateway);
 const key = devKey;
 
-export const postData = async(text) => {
+export const createPost = async(text) => {
     if (typeof(text) != 'string') {
         throw 'Input must be a string!'
     };

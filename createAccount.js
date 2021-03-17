@@ -7,8 +7,8 @@ const arweave = Arweave.init(gateway);
 const address = await arweave.wallets.jwkToAddress(devKey)
 
 const key = devKey
-
-const createAccount = async(name, biography, address) => {
+//Create account will now be used for updating accounts.  This is to increase the efficiency of getAccount(), as this allows updating of accounts with one less call to the gateway
+export const createAccount = async(name, biography, address) => {
     
     if (typeof address != 'string') {
         throw 'Invalid Public Key: Key must be a string'
@@ -26,7 +26,9 @@ const createAccount = async(name, biography, address) => {
         throw 'Name must be a string'
     }
 
-    const checkIfRegistered = ( await run(`query($cursor: String) {
+    //This may be added back in later, depending on how the smart contract for user handles functions
+
+/*    const checkIfRegistered = ( await run(`query($cursor: String) {
         transactions(owners:["`+address+`"]
         recipients:["nYxifPxxc1LmxIq3RIMyLE2hnNZ5fdVZlDZ0f-5qa4U"]
           tags: [
@@ -50,7 +52,7 @@ const createAccount = async(name, biography, address) => {
     ))
 if (checkIfRegistered.data.transactions.edges != '') {
     throw 'User is already registered'
-}
+}*/
 
 let postTime = Date.now()
     postTime = postTime.toString()
