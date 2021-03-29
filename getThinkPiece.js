@@ -5,7 +5,7 @@ import { getDataFromTXID } from './getDataFromTXID.js';
 import { sortChronological } from './internal/sortChronological.js';
 const arweave = Arweave.init(gateway);
 
-export var getThought = async(publicKey, numOfPosts) => {
+export var getThinkPiece = async(publicKey, numOfPosts) => {
 
 if (typeof numOfPosts != 'number') {
     throw 'Number of posts queried must be an integer'

@@ -6,7 +6,7 @@ const arweave = Arweave.init(gateway);
 
 const key = devKey
 
-export var createThought2 = async(text, photo, privateKey) => { // If no photo, input 'none'
+export var createThought = async(text, photo, privateKey) => { // If no photo, input 'none'
     if (text.length > 300 ) {
         throw 'Input must be less than 300'
     }

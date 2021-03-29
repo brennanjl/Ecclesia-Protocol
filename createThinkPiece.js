@@ -6,7 +6,7 @@ const arweave = Arweave.init(gateway);
 
 const key = devKey
 
-export var createThought = async(text, photo, privateKey) => { //If no photo, then enter 'none'
+export var createThinkPiece = async(text, photo, privateKey) => { //If no photo, then enter 'none'
 
 if (photo != 'none'){
     var photoID = await addPhoto(photo, key)
