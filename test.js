@@ -4,7 +4,7 @@ import {devKey} from './devKey.js'; //This imports the devs personal key from a 
 const arweave = Arweave.init(gateway);
 const key = devKey;
 
-export const createPost = async(text) => {
+export const createThought = async(text) => {
     if (typeof(text) != 'string') {
         throw 'Input must be a string!'
     };
@@ -24,14 +24,11 @@ export const createPost = async(text) => {
 
     _transaction.addTag('App-Name', 'Ecclesia');
     _transaction.addTag('version', '0.0.1');
-    _transaction.addTag('Type', 'post');
+    _transaction.addTag('Type', 'Thought');
 
     await arweave.transactions.sign(_transaction, key);
     
-    let uploader = await arweave.transactions.getUploader(_transaction);
+console.log(_transaction)
+    }
 
-    while (!uploader.isComplete) {
-      await uploader.uploadChunk();
-      console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
-    }
-    }
+createThought('yuh')

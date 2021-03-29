@@ -1,11 +1,12 @@
 import { all, fetchTxTag, run } from 'ar-gql';
 import Arweave from "arweave";
-import axios from 'axios';
 import {publicKey} from './devKey.js' //not needed in final version, just for local testing purposes
 import {gateway} from "./gateway.js";
+import { getDataFromTXID } from './Internal/getDataFromTXID.js';
+import { sortChronological } from './Internal/sortChronological.js';
 const arweave = Arweave.init(gateway);
 
-export const getPost = async(publicKey, numOfPosts) => {
+export const getThought = async(publicKey, numOfPosts) => {
 
 if (typeof numOfPosts != 'number') {
     throw 'Number of posts queried must be an integer'
@@ -18,7 +19,6 @@ if (Math.ceil(numOfPosts) != numOfPosts) {
 if (numOfPosts < 1) {
     throw 'Number of posts queried must be greater than 0'
 };
-
 if (typeof publicKey != 'string') {
     throw 'Invalid Public Key: Key must be a string'
 };
@@ -34,7 +34,7 @@ const getID = ( await run(`query($cursor: String) {
     sort: HEIGHT_DESC,
       tags: [
         { name: "App-Name", values: ["Ecclesia"] }
-        { name: "Type", values: ["post"] }
+        { name: "Type", values: ["Thought"] }
       ]
       after: $cursor
     ) 
@@ -49,10 +49,6 @@ const getID = ( await run(`query($cursor: String) {
           owner {
             address
           }
-          tags {
-              name
-              value
-          }
         }
       }
     }
@@ -60,40 +56,15 @@ const getID = ( await run(`query($cursor: String) {
 )
 );
 
-let postMetadata = getID.data.transactions.edges
+let postMetaData = getID.data.transactions.edges
 
-const returnedData = []
-for (let i in postMetadata) {
+const postData = await getDataFromTXID(postMetaData)
 
-    const postData = await axios.get(
-        "https://arweave.net/"+postMetadata[i].node.id
-        )
-    returnedData.push(postData.data)
+const sortedData = await sortChronological(postData, numOfPosts)
+
+
+console.log(sortedData[0].textData)
+return sortedData[0].textData
 }
 
-let sortedData = []
-
-if (numOfPosts > 1) {
-for (let i in returnedData) {
-    if (sortedData.length == 0) {
-        sortedData.push(returnedData[i])
-    }
-    else {
-        for (let j in sortedData){
-            if (returnedData[i].timeStamp <= sortedData[j].timeStamp) {
-                sortedData.unshift(returnedData[i])
-                break;
-            }
-            else if (j == sortedData.length-1) {
-                sortedData.push(returnedData[i])
-            }
-        }
-    }
-
-}
-}
-
-
-console.log(sortedData)
-return sortedData
-}
+getThought('Cf1cXx1wENt0XOA9wMoTWYB-rvP0jEdGS1gdQN7XkvQ', 1)
