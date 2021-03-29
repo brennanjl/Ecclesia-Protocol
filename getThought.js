@@ -31,6 +31,7 @@ export var getThought = async(publicKey, numOfPosts) => {
           edges {
             cursor
             node {
+                id
                 tags{
                     name
                     value
@@ -47,13 +48,14 @@ export var getThought = async(publicKey, numOfPosts) => {
     const postList = []
       for (let post in getID.data.transactions.edges) {
         if (typeof getID.data.transactions.edges[post].node.tags[5] != 'undefined') {
-        postList.push({"thought": getID.data.transactions.edges[post].node.tags[4].value, "timeStamp": getID.data.transactions.edges[post].node.tags[3].value, "photoTXID": getID.data.transactions.edges[post].node.tags[5].value})
+        postList.push({"thought": getID.data.transactions.edges[post].node.tags[4].value, "timeStamp": getID.data.transactions.edges[post].node.tags[3].value, "photoTXID": getID.data.transactions.edges[post].node.tags[5].value, "postTXID": getID.data.transactions.edges[post].node.id})
         }
       }
 
         let sortedPostList = await sortChronological(postList, numOfPosts)
       console.log(sortedPostList)
       return sortedPostList
+
 }
 
 //getThought('Cf1cXx1wENt0XOA9wMoTWYB-rvP0jEdGS1gdQN7XkvQ', 50)
