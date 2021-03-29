@@ -1,7 +1,6 @@
 import { all, fetchTxTag, run } from 'ar-gql';
 import Arweave from "arweave";
 import {gateway} from "./gateway.js";
-import { getDataFromTXID } from './getDataFromTXID.js';
 import { sortChronological } from './internal/sortChronological.js';
 const arweave = Arweave.init(gateway);
 
@@ -47,12 +46,17 @@ export var getComments = async(postTXID, numOfPosts) => {
     )
     const commentList = []
       for (let comment in getID.data.transactions.edges) {
+          if (typeof getID.data.transactions.edges[comment].node.tags[5].value != 'undefined') {
           //console.log('{"comment": "'+getID.data.transactions.edges[comment].node.tags[5].value+'", "timeStamp": "'+getID.data.transactions.edges[comment].node.tags[4].value+'"}')
           commentList.push({"comment": getID.data.transactions.edges[comment].node.tags[5].value, "timeStamp": getID.data.transactions.edges[comment].node.tags[4].value})
      //console.log(getID.data.transactions.edges[comment].node.tags[5].value)
         }
-      console.log(commentList)
-      return commentList
+    }
+    
+        let sortedCommentList = await sortChronological(commentList, numOfPosts)
+        sortedCommentList.reverse()
+      console.log(sortedCommentList)
+      return sortedCommentList
 }
 
-getComments('Ne7OTqA4Ml1gblkWvhItly7mJX93X35NZDIJbG2m-wY', 5)
+//getComments('Ne7OTqA4Ml1gblkWvhItly7mJX93X35NZDIJbG2m-wY',200)
