@@ -39,3 +39,5 @@ const response = await arweave.transactions.post(_transaction);
 console.log(response.status)
 
 }
+
+createComment('What a cool post!', 'Ne7OTqA4Ml1gblkWvhItly7mJX93X35NZDIJbG2m-wY', key)
