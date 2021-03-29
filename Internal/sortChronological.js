@@ -23,6 +23,7 @@ for (let i in returnedData) {
 else {
     sortData.push(returnedData[0])
 }
+sortData.reverse()
 return sortData
 }
 export var sortChronological

@@ -8,7 +8,7 @@ const address = await arweave.wallets.jwkToAddress(devKey)
 
 const key = devKey
 //Create account will now be used for updating accounts.  This is to increase the efficiency of getAccount(), as this allows updating of accounts with one less call to the gateway
-export const createAccount = async(name, biography, address) => {
+export var createAccount = async(name, biography, address) => {
     
     if (typeof address != 'string') {
         throw 'Invalid Public Key: Key must be a string'

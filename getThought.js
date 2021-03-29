@@ -1,12 +1,11 @@
 import { all, fetchTxTag, run } from 'ar-gql';
 import Arweave from "arweave";
-import {publicKey} from './devKey.js' //not needed in final version, just for local testing purposes
 import {gateway} from "./gateway.js";
-import { getDataFromTXID } from './Internal/getDataFromTXID.js';
-import { sortChronological } from './Internal/sortChronological.js';
+import { getDataFromTXID } from './getDataFromTXID.js';
+import { sortChronological } from './internal/sortChronological.js';
 const arweave = Arweave.init(gateway);
 
-export const getThought = async(publicKey, numOfPosts) => {
+export var getThought = async(publicKey, numOfPosts) => {
 
 if (typeof numOfPosts != 'number') {
     throw 'Number of posts queried must be an integer'
@@ -63,8 +62,6 @@ const postData = await getDataFromTXID(postMetaData)
 const sortedData = await sortChronological(postData, numOfPosts)
 
 
-console.log(sortedData[0].textData)
-return sortedData[0].textData
+console.log(sortedData)
+return sortedData
 }
-
-getThought('Cf1cXx1wENt0XOA9wMoTWYB-rvP0jEdGS1gdQN7XkvQ', 1)

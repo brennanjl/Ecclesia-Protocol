@@ -7,7 +7,7 @@ const arweave = Arweave.init(gateway);
 
 const address = await arweave.wallets.jwkToAddress(devKey)
 
-export const getAccount = async(address) => {
+export var getAccount = async(address) => {
     if (typeof address != 'string') {
         throw 'Invalid Public Key: Key must be a string'
     };

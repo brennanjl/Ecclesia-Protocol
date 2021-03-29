@@ -4,7 +4,7 @@ import fs from 'fs';
 //import {devKey} from './devKey.js'; //This imports the devs personal key from a file in .gitignore, and will be replaced once the library is ready for use
 const arweave = Arweave.init(gateway);
 
-var addPhoto = async(photo, postTXID, privateKey) => {
+var addPhoto = async(photo, privateKey) => {
 
     let key = privateKey
 
@@ -19,8 +19,6 @@ quantity: arweave.ar.arToWinston('0.0001')}, key);
 _transaction.addTag('App-Name', 'Ecclesia');
     _transaction.addTag('version', '0.0.1');
     _transaction.addTag('Type', 'Photo');
-    _transaction.addTag('PostTXID', postTXID);
-
 
 await arweave.transactions.sign(_transaction, key);
 
@@ -30,7 +28,7 @@ while (!uploader.isComplete) {
   await uploader.uploadChunk();
   console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
 }
-
+return _transaction.id
 }
 
 export var addPhoto
