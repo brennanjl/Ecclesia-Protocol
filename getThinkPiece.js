@@ -1,7 +1,7 @@
 import { all, fetchTxTag, run } from 'ar-gql';
 import Arweave from "arweave";
 import {gateway} from "./gateway.js";
-import { getDataFromTXID } from './getDataFromTXID.js';
+import { getDataFromMetaData } from './getDataFromMetaData.js';
 import { sortChronological } from './internal/sortChronological.js';
 const arweave = Arweave.init(gateway);
 
@@ -57,10 +57,9 @@ const getID = ( await run(`query($cursor: String) {
 
 let postMetaData = getID.data.transactions.edges
 
-const postData = await getDataFromTXID(postMetaData)
+const postData = await getDataFromMetaData(postMetaData)
 
 const sortedData = await sortChronological(postData, numOfPosts)
-
 
 console.log(sortedData)
 return sortedData

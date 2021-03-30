@@ -1,16 +1,10 @@
 import axios from 'axios';
 
-var getDataFromTXID = async(metadata) => {
-
-const returnedData = []
-for (let i in metadata) {
-
+var getDataFromTXID = async(TXID) => {
     const postData = await axios.get(
-        "https://arweave.net/"+metadata[i].node.id
+        "https://arweave.net/"+TXID
         )
-    returnedData.push(postData.data)
-}
-return returnedData
+return postData
 }
 
 export var getDataFromTXID

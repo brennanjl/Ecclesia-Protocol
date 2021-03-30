@@ -1,32 +1,30 @@
 import Arweave from 'arweave';
 import {gateway} from "./gateway.js";
+import { addPhoto } from './internal/addPhoto.js';
 import { all, fetchTxTag, run } from 'ar-gql';
 import axios from 'axios';
 import {devKey} from './devKey.js'; //This imports the devs personal key from a file in .gitignore, and will be replaced once the library is ready for use
+import { sortChronological } from './internal/sortChronological.js';
+import { getDataFromTXID } from './getDataFromTXID.js';
+
 const arweave = Arweave.init(gateway);
 const address = await arweave.wallets.jwkToAddress(devKey)
 
 const key = devKey
-//Create account will now be used for updating accounts.  This is to increase the efficiency of getAccount(), as this allows updating of accounts with one less call to the gateway
-export var createAccount = async(name, biography, privateKey) => {
-    const pubKey = await arweave.wallets.jwkToAddress(privateKey)
 
-    if (typeof biography != 'string') {
-        throw 'Biography must be a string'
-    }
+export var createPFP = async(photo, privateKey) => {
 
-    if (typeof name != 'string') {
-        throw 'Name must be a string'
-    }
+const pubKey = await arweave.wallets.jwkToAddress(privateKey)
 
-    //This may be added back in later, depending on how the smart contract for user handles functions
-
-/*    const checkIfRegistered = ( await run(`query($cursor: String) {
-        transactions(owners:["`+address+`"]
+    const checkIfRegistered = ( await run(`query($cursor: String) {
+        transactions(owners:["`+pubKey+`"]
         recipients:["nYxifPxxc1LmxIq3RIMyLE2hnNZ5fdVZlDZ0f-5qa4U"]
+        first: 2
+        sort: HEIGHT_DESC
           tags: [
             { name: "App-Name", values: ["Ecclesia"] }
             { name: "Type", values: ["Account-Registration"] }
+            { name: "version", values: ["0.0.1"] }
           ]
           after: $cursor
         ) 
@@ -35,6 +33,10 @@ export var createAccount = async(name, biography, privateKey) => {
             cursor
             node {
                 id
+                tags{
+                    name
+                    value
+                }
               owner {
                 address
               }
@@ -43,16 +45,30 @@ export var createAccount = async(name, biography, privateKey) => {
         }
       }`
     ))
-if (checkIfRegistered.data.transactions.edges != '') {
-    throw 'User is already registered'
-}*/
+if (checkIfRegistered.data.transactions.edges == '') {
+    throw 'User is not registered'
+}
+
+const postList = []
+for (let post in checkIfRegistered.data.transactions.edges) {
+  postList.push({"timeStamp": checkIfRegistered.data.transactions.edges[post].node.tags[3].value, "TXID": checkIfRegistered.data.transactions.edges[post].node.id})
+}
+
+const sortedAccountMetaData = await sortChronological(postList, 2)
+
+console.log(sortedAccountMetaData[0])
+
+let accountData = await getDataFromTXID(sortedAccountMetaData[0].TXID)
+
+accountData = accountData.data
+
+accountData.pfpTXID = await addPhoto(photo, privateKey)
 
 let postTime = Date.now()
-    postTime = postTime.toString()
-    name = '"'+name+'"';
-    biography = '"'+biography+'"'
-    let _transaction = await arweave.createTransaction({
-    data: '{"name": '+name+', "biography": '+biography+', "address":"'+pubKey+'", "pfpTXID": "none"}',
+postTime = postTime.toString()//posted data must be in Uint8Array, ArrayBuffer, or string
+
+let _transaction = await arweave.createTransaction({
+    data: JSON.stringify(accountData),
     target: 'nYxifPxxc1LmxIq3RIMyLE2hnNZ5fdVZlDZ0f-5qa4U',
     quantity: arweave.ar.arToWinston('0.0001')
 }, privateKey);
@@ -71,7 +87,6 @@ let postTime = Date.now()
       await uploader.uploadChunk();
       console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
     }
-
+console.log(accountData)
 }
-
-//createAccount('Brennan Lamey', 'Ecclesia Founder, Free Speech Enthusiast, I kind of suck at coding', key)
+//createPFP('./Ecclesia Square No Back.png', key)

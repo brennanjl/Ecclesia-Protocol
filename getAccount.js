@@ -68,3 +68,4 @@ for (let i in returnedData) {
         return sortedData[0]
 }
 }
+//getAccount('Cf1cXx1wENt0XOA9wMoTWYB-rvP0jEdGS1gdQN7XkvQ')
