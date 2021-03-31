@@ -1,6 +1,6 @@
 import Arweave from 'arweave';
-import {gateway} from "./gateway.js";
-import {devKey} from './devKey.js'; //This imports the devs personal key from a file in .gitignore, and will be replaced once the library is ready for use
+import {gateway} from "../gateway.js";
+import {devKey} from '../devKey.js'; //This imports the devs personal key from a file in .gitignore, and will be replaced once the library is ready for use
 const arweave = Arweave.init(gateway);
 
 const key = devKey
@@ -22,17 +22,10 @@ _transaction.addTag('App-Name', 'Ecclesia');
 _transaction.addTag('version', '0.0.1');
 _transaction.addTag('Type', 'Comment');
 _transaction.addTag('Main-Post', mainPostTXID);
-_transaction.addTag('Time', postTime);
+_transaction.addTag('timeStamp', postTime);
 _transaction.addTag('Comment-Text', text);
 
 await arweave.transactions.sign(_transaction, privateKey);
-    
-let uploader = await arweave.transactions.getUploader(_transaction);
-
-/*while (!uploader.isComplete) {
-  await uploader.uploadChunk();
-  console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
-}*/
 
 const response = await arweave.transactions.post(_transaction);
 
