@@ -3,14 +3,14 @@ import {gateway} from "./gateway.js";
 import { addPhoto } from './internal/addPhoto.js';
 import { all, fetchTxTag, run } from 'ar-gql';
 import axios from 'axios';
-import {devKey} from './devKey.js'; //This imports the devs personal key from a file in .gitignore, and will be replaced once the library is ready for use
+// import {devKey} from './devKey.js'; //This imports the devs personal key from a file in .gitignore, and will be replaced once the library is ready for use
 import { sortChronological } from './internal/sortChronological.js';
 import { getDataFromTXID } from './getDataFromTXID.js';
 
 const arweave = Arweave.init(gateway);
-const address = await arweave.wallets.jwkToAddress(devKey)
+// const address = await arweave.wallets.jwkToAddress(devKey)
 
-const key = devKey
+// const key = devKey
 
 export var createPFP = async(photo, privateKey) => {
 

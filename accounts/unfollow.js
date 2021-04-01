@@ -1,10 +1,10 @@
 import Arweave from 'arweave';
 import {gateway} from "../gateway.js";
-import {devKey} from '../devKey.js'; //This imports the devs personal key from a file in .gitignore, and will be replaced once the library is ready for use
+// import {devKey} from '../devKey.js'; //This imports the devs personal key from a file in .gitignore, and will be replaced once the library is ready for use
 import { getFollowing } from './getFollowing.js';
 const arweave = Arweave.init(gateway);
 
-const key = devKey
+// const key = devKey
 
 export var unfollow = async(othersPublicID, privateKey) => {
 

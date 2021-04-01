@@ -2,11 +2,11 @@ import Arweave from 'arweave';
 import {gateway} from "../gateway.js";
 import { all, fetchTxTag, run } from 'ar-gql';
 import axios from 'axios';
-import {devKey} from '../devKey.js'; //This imports the devs personal key from a file in .gitignore, and will be replaced once the library is ready for use
+// import {devKey} from '../devKey.js'; //This imports the devs personal key from a file in .gitignore, and will be replaced once the library is ready for use
 import { createFollowerList } from './internal/createFollowerList.js';
 const arweave = Arweave.init(gateway);
 
-const key = devKey
+// const key = devKey
 //Create account will now be used for updating accounts.  This is to increase the efficiency of getAccount(), as this allows updating of accounts with one less call to the gateway
 export var createAccount = async(name, biography, privateKey) => {
     const pubKey = await arweave.wallets.jwkToAddress(privateKey)
