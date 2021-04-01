@@ -4,7 +4,7 @@ JS Library for interacting with Ecclesia.
 # Installation
 
 ```
-npm install ecclesia-protocol
+npm install ecclesia-js
 ```
 
 # Usage 
