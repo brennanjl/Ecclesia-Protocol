@@ -1,6 +1,6 @@
 import { all, fetchTxTag, run } from 'ar-gql';
 import Arweave from "arweave";
-import {gateway} from "./gateway.js";
+import {gateway} from "../gateway.js";
 import { sortChronological } from './internal/sortChronological.js';
 const arweave = Arweave.init(gateway);
 

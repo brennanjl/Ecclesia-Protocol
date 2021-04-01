@@ -1,5 +1,5 @@
 import Arweave from 'arweave';
-import {gateway} from "./gateway.js";
+import {gateway} from "../gateway.js";
 import {addPhoto} from './internal/addPhoto.js';
 // import {devKey} from './devKey.js'; //This imports the devs personal key from a file in .gitignore, and will be replaced once the library is ready for use
 const arweave = Arweave.init(gateway);

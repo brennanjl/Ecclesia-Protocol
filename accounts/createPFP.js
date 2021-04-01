@@ -1,5 +1,5 @@
 import Arweave from 'arweave';
-import {gateway} from "./gateway.js";
+import {gateway} from "../gateway.js";
 import { addPhoto } from './internal/addPhoto.js';
 import { all, fetchTxTag, run } from 'ar-gql';
 import axios from 'axios';
