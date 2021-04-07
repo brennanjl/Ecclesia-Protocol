@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "ecclesia-js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "JS library for interacting with the Ecclesia Protocol",
   "main": "index.js",
   "scripts": {
