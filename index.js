@@ -8,7 +8,7 @@ import { getAccount } from "./accounts/getAccount";
 import { getFollowing } from "./accounts/getFollowing";
 import { createPFP } from "./accounts/createPFP";
 
-module.exports = {
+export {
   createThought,
   getThought,
   createComment,

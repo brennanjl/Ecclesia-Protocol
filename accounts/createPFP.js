@@ -1,23 +1,21 @@
-import Arweave from 'arweave';
-import {gateway} from "../gateway.js";
-import { addPhoto } from './internal/addPhoto.js';
-import { all, fetchTxTag, run } from 'ar-gql';
-import axios from 'axios';
-// import {devKey} from './devKey.js'; //This imports the devs personal key from a file in .gitignore, and will be replaced once the library is ready for use
-import { sortChronological } from './internal/sortChronological.js';
-import { getDataFromTXID } from './getDataFromTXID.js';
+import Arweave from "arweave";
+import { gateway } from "../gateway.js";
+import { addPhoto } from "../Internal/addPhoto.js";
+import { all, fetchTxTag, run } from "ar-gql";
+import axios from "axios";
+import { sortChronological } from "../Internal/sortChronological.js";
+import { getDataFromTXID } from "../Internal/getDataFromTXID";
 
 const arweave = Arweave.init(gateway);
-// const address = await arweave.wallets.jwkToAddress(devKey)
 
-// const key = devKey
+export var createPFP = async (photo, privateKey) => {
+  const pubKey = await arweave.wallets.jwkToAddress(privateKey);
 
-export var createPFP = async(photo, privateKey) => {
-
-const pubKey = await arweave.wallets.jwkToAddress(privateKey)
-
-    const checkIfRegistered = ( await run(`query($cursor: String) {
-        transactions(owners:["`+pubKey+`"]
+  const checkIfRegistered = await run(
+    `query($cursor: String) {
+        transactions(owners:["` +
+      pubKey +
+      `"]
         recipients:["nYxifPxxc1LmxIq3RIMyLE2hnNZ5fdVZlDZ0f-5qa4U"]
         first: 2
         sort: HEIGHT_DESC
@@ -44,49 +42,57 @@ const pubKey = await arweave.wallets.jwkToAddress(privateKey)
           }
         }
       }`
-    ))
-if (checkIfRegistered.data.transactions.edges == '') {
-    throw 'User is not registered'
-}
+  );
+  if (checkIfRegistered.data.transactions.edges == "") {
+    throw "User is not registered";
+  }
 
-const postList = []
-for (let post in checkIfRegistered.data.transactions.edges) {
-  postList.push({"timeStamp": checkIfRegistered.data.transactions.edges[post].node.tags[3].value, "TXID": checkIfRegistered.data.transactions.edges[post].node.id})
-}
+  const postList = [];
+  for (let post in checkIfRegistered.data.transactions.edges) {
+    postList.push({
+      timeStamp:
+        checkIfRegistered.data.transactions.edges[post].node.tags[3].value,
+      TXID: checkIfRegistered.data.transactions.edges[post].node.id,
+    });
+  }
 
-const sortedAccountMetaData = await sortChronological(postList, 2)
+  const sortedAccountMetaData = await sortChronological(postList, 2);
 
-console.log(sortedAccountMetaData[0])
+  console.log(sortedAccountMetaData[0]);
 
-let accountData = await getDataFromTXID(sortedAccountMetaData[0].TXID)
+  let accountData = await getDataFromTXID(sortedAccountMetaData[0].TXID);
 
-accountData = accountData.data
+  accountData = accountData.data;
 
-accountData.pfpTXID = await addPhoto(photo, privateKey)
+  accountData.pfpTXID = await addPhoto(photo, privateKey);
 
-let postTime = Date.now()
-postTime = postTime.toString()//posted data must be in Uint8Array, ArrayBuffer, or string
+  let postTime = Date.now();
+  postTime = postTime.toString(); //posted data must be in Uint8Array, ArrayBuffer, or string
 
-let _transaction = await arweave.createTransaction({
-    data: JSON.stringify(accountData),
-    target: 'nYxifPxxc1LmxIq3RIMyLE2hnNZ5fdVZlDZ0f-5qa4U',
-    quantity: arweave.ar.arToWinston('0.0001')
-}, privateKey);
+  let _transaction = await arweave.createTransaction(
+    {
+      data: JSON.stringify(accountData),
+      target: "nYxifPxxc1LmxIq3RIMyLE2hnNZ5fdVZlDZ0f-5qa4U",
+      quantity: arweave.ar.arToWinston("0.0001"),
+    },
+    privateKey
+  );
 
+  _transaction.addTag("App-Name", "Ecclesia");
+  _transaction.addTag("Type", "Account-Registration");
+  _transaction.addTag("version", "0.0.1");
+  _transaction.addTag("timeStamp", postTime);
 
-    _transaction.addTag('App-Name', 'Ecclesia');
-    _transaction.addTag('Type', 'Account-Registration');
-    _transaction.addTag('version', '0.0.1');
-    _transaction.addTag('timeStamp', postTime);
+  await arweave.transactions.sign(_transaction, privateKey);
 
-    await arweave.transactions.sign(_transaction, privateKey);
-    
-    let uploader = await arweave.transactions.getUploader(_transaction);
+  let uploader = await arweave.transactions.getUploader(_transaction);
 
-    while (!uploader.isComplete) {
-      await uploader.uploadChunk();
-      console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
-    }
-console.log(accountData)
-}
+  while (!uploader.isComplete) {
+    await uploader.uploadChunk();
+    console.log(
+      `${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`
+    );
+  }
+  console.log(accountData);
+};
 //createPFP('./Ecclesia Square No Back.png', key)
