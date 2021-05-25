@@ -1,12 +1,14 @@
 import Arweave from 'arweave';
 import {gateway} from "../gateway.js";
 // import {devKey} from './devKey.js'; //This imports the devs personal key from a file in .gitignore, and will be replaced once the library is ready for use
-import {addPhoto} from './internal/addPhoto.js';
+import {addPhoto} from '../internal/addPhoto.js';
 const arweave = Arweave.init(gateway);
 
 // const key = devKey
 
 export var createThinkPiece = async(text, photo, privateKey) => { //If no photo, then enter 'none'
+
+const key = privateKey;
 
 if (photo != 'none'){
     var photoID = await addPhoto(photo, key)
@@ -36,7 +38,7 @@ photoID = '"'+photoID+'"'
 
     _transaction.addTag('App-Name', 'Ecclesia');
     _transaction.addTag('version', '0.0.1');
-    _transaction.addTag('Type', 'Thought');
+    _transaction.addTag('Type', 'ThinkPiece');
 
 
     await arweave.transactions.sign(_transaction, key);

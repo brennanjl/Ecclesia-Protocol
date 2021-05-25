@@ -3,8 +3,8 @@ import { gateway } from "../gateway.js";
 import { addPhoto } from "../Internal/addPhoto.js";
 import { all, fetchTxTag, run } from "ar-gql";
 import axios from "axios";
-import { sortChronological } from "../Internal/sortChronological.js";
-import { getDataFromTXID } from "../Internal/getDataFromTXID";
+import { sortChronological } from "../internal/sortChronological.js";
+import { getDataFromTXID } from "../internal/getDataFromTXID.js";
 
 const arweave = Arweave.init(gateway);
 

@@ -1,8 +1,8 @@
 import { all, fetchTxTag, run } from 'ar-gql';
 import Arweave from "arweave";
 import {gateway} from "../gateway.js";
-import { getDataFromMetaData } from './getDataFromMetaData.js';
-import { sortChronological } from './internal/sortChronological.js';
+import { getDataFromMetaData } from '../internal/getDataFromMetaData.js';
+import { sortChronological } from '../internal/sortChronological.js';
 const arweave = Arweave.init(gateway);
 
 export var getThinkPiece = async(publicKey, numOfPosts) => {
@@ -33,7 +33,7 @@ const getID = ( await run(`query($cursor: String) {
     sort: HEIGHT_DESC,
       tags: [
         { name: "App-Name", values: ["Ecclesia"] }
-        { name: "Type", values: ["Thought"] }
+        { name: "Type", values: ["ThinkPieces"] }
       ]
       after: $cursor
     ) 

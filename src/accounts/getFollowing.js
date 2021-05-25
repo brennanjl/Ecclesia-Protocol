@@ -2,8 +2,8 @@ import { all, fetchTxTag, run } from "ar-gql";
 import Arweave from "arweave";
 import axios from "axios";
 import { gateway } from "../gateway.js";
-import { getDataFromTXID } from "../Internal/getDataFromTXID";
-import { sortChronological } from "../Internal/sortChronological.js";
+import { getDataFromTXID } from "../internal/getDataFromTXID.js";
+import { sortChronological } from "../internal/sortChronological.js";
 const arweave = Arweave.init(gateway);
 
 export var getFollowing = async (publicKey) => {

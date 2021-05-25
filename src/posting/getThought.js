@@ -1,7 +1,7 @@
 import { all, fetchTxTag, run } from "ar-gql";
 import Arweave from "arweave";
 import { gateway } from "../gateway.js";
-import { sortChronological } from "../Internal/sortChronological.js";
+import { sortChronological } from "../internal/sortChronological.js";
 const arweave = Arweave.init(gateway);
 
 export var getThought = async (publicKey, numOfPosts) => {
